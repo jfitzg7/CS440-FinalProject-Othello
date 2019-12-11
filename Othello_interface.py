@@ -157,6 +157,12 @@ class Othello_AI:
 
         pass
 
+    def terminal_test(self, board_state):
+        if len(get_all_moves(board_state, 'W')) != 0 or len(get_all_moves(board_state, 'B')) != 0:
+            return False
+        else:
+            return True
+
 
 def get_team_name(self):
     # returns a string containing your team name
