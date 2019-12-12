@@ -1,5 +1,6 @@
 from OthelloEngine import get_all_moves
 import random
+from math import inf
 
 
 class Othello_AI:
@@ -14,7 +15,9 @@ class Othello_AI:
         # Possible values are: 'W', 'B', or '-'
         # Return your desired move (If invalid, instant loss)
         # Example move: ('W', (1, 6))
-        return alpha_beta_cutoff_search(board_state, self)
+        best_move = alpha_beta_cutoff_search(board_state, self)
+        return best_move
+
 
     def actions(self, board_state):
         return get_all_moves(board_state, self.team_type)
@@ -152,7 +155,8 @@ class Othello_AI:
             # set the spot in the board_state
             board_state[r][c] = color
 
-        pass
+        return board_state
+
 
     def terminal_test(self, board_state):
         if len(get_all_moves(board_state, 'W')) != 0 or len(get_all_moves(board_state, 'B')) != 0:
@@ -166,17 +170,16 @@ class Othello_AI:
     def utility(self, board_state, player):
         totalPieceCount = 0
         if player == 'W':
-            white_count = sum(row.count('W') for row in self.game_state)
+            white_count = sum(row.count('W') for row in board_state)
             totalPieceCount = white_count
         else:
-            black_count = sum(row.count('B') for row in self.game_state)
+            black_count = sum(row.count('B') for row in board_state)
             totalPieceCount = black_count
         return totalPieceCount
 
-
-def get_team_name(self):
-    # returns a string containing your team name
-    return "Alpha-beta bot"
+    def get_team_name(self):
+        # returns a string containing your team name
+        return "Alpha-beta bot"
 
 #Alpha-beta cutoff from aimapython repository
 def alpha_beta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
@@ -221,3 +224,14 @@ def alpha_beta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
             best_score = v
             best_action = a
     return best_action
+
+
+#___________TESTING___________
+if __name__ == "__main__":
+    testBot = Othello_AI('B')
+    board_state = [['-' for i in range(8)] for j in range(8)]
+    board_state[8 // 2 - 1][8 // 2 - 1] = "W"
+    board_state[8 // 2][8 // 2] = "W"
+    board_state[8 // 2 - 1][8 // 2] = "B"
+    board_state[8 // 2][8 // 2 - 1] = "B"
+    testBot.get_move(board_state)
