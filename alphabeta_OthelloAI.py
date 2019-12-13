@@ -15,7 +15,7 @@ class Othello_AI:
         # Possible values are: 'W', 'B', or '-'
         # Return your desired move (If invalid, instant loss)
         # Example move: ('W', (1, 6))
-        best_move = alpha_beta_cutoff_search(board_state, self)
+        best_move = alpha_beta_cutoff_search(board_state, self, 6)
         return best_move
 
 
