@@ -1,7 +1,8 @@
 <template>
   <div class="game">
-    <Statistics></Statistics>
     <Board></Board>
+    <br/>
+    <Statistics></Statistics>
   </div>
 </template>
 
