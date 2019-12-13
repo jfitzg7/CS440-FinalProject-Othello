@@ -1,5 +1,6 @@
 from OthelloEngine import get_all_moves
 import random
+import copy
 from math import inf
 
 
@@ -15,12 +16,20 @@ class Othello_AI:
         # Possible values are: 'W', 'B', or '-'
         # Return your desired move (If invalid, instant loss)
         # Example move: ('W', (1, 6))
-        best_move = alpha_beta_cutoff_search(board_state, self, 6)
+        print("Team: " + self.team_type)
+        best_move = alpha_beta_cutoff_search(copy.deepcopy(board_state), self, d=4)
+        print("All moves: " + str(self.actions(board_state)))
+        print("Best move: " + str(best_move))
         return best_move
 
 
     def actions(self, board_state):
-        return get_all_moves(board_state, self.team_type)
+        moves = get_all_moves(board_state, self.team_type)
+        if len(moves) == 0:
+            return [(self.team_type, None)]
+        else:
+            return moves
+
 
     def result(self, board_state, move):
         if move[1] is not None:
@@ -183,14 +192,15 @@ class Othello_AI:
 
 #Alpha-beta cutoff from aimapython repository
 def alpha_beta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
-    """Search game to determine best action; use alpha-beta pruning.
-    This version cuts off search and uses an evaluation function."""
-
     player = game.to_move()
 
     # Functions used by alpha_beta
     def max_value(state, alpha, beta, depth):
         if cutoff_test(state, depth):
+            #print("Depth reached: " + str(depth))
+            #print(" State: " + str(state))
+            #print(" Utility: " + str(eval_fn(state)))
+            #print(" Terminal state?: " + str(game.terminal_test(state)))
             return eval_fn(state)
         v = -inf
         for a in game.actions(state):
@@ -202,6 +212,10 @@ def alpha_beta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
 
     def min_value(state, alpha, beta, depth):
         if cutoff_test(state, depth):
+            #print("Depth reached: " + str(depth))
+            #print(" State: " + str(state))
+            #print(" Utility: " + str(eval_fn(state)))
+            #print(" Terminal state? " + str(game.terminal_test(state)))
             return eval_fn(state)
         v = inf
         for a in game.actions(state):
