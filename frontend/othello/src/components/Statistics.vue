@@ -11,6 +11,7 @@
         <b-list-group-item v-else>Tie game!</b-list-group-item>
       </b-list-group>
     </b-row>
+    <br/>
     <b-container>
       <b-table striped hover :items="turns"></b-table>
     </b-container>
