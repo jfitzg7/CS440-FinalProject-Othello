@@ -47,7 +47,7 @@ class GameEngine:
         self.game_state[n // 2][n // 2] = "W"
         self.game_state[n // 2 - 1][n // 2] = "B"
         self.game_state[n // 2][n // 2 - 1] = "B"
-        #JACK123 EDIT FOR FRONTEND
+        #Create list for game states
         self.all_game_states = []
         # call play_game (returns winner)
         self.winner = self.play_game()
