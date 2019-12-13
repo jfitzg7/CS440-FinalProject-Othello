@@ -47,6 +47,8 @@ class GameEngine:
         self.game_state[n // 2][n // 2] = "W"
         self.game_state[n // 2 - 1][n // 2] = "B"
         self.game_state[n // 2][n // 2 - 1] = "B"
+        #JACK123 EDIT FOR FRONTEND
+        self.all_game_states = []
         # call play_game (returns winner)
         self.winner = self.play_game()
         # call output_game
@@ -79,6 +81,7 @@ class GameEngine:
                 else:
                     self.update_board(move)
                     self.all_moves.append(move)
+                    self.all_game_states.append(copy.deepcopy(self.game_state))
 
                 gameEnd = self.check_end();
                 if gameEnd != None:
@@ -277,6 +280,7 @@ class GameEngine:
             # set the spot in the game_state
             self.game_state[r][c] = color
 
+
     # Check for end condition
     def check_end(self):
         # Check the board to see if the game can continue
@@ -319,7 +323,7 @@ class GameEngine:
         game_metadata = {"version": self.get_version(), "teamWhite": self.white_team.get_team_name(),
                          "teamBlack": self.black_team.get_team_name(), "winner": self.winner,
                          "statistics": game_statistics,
-                         "boardSize": self.n, "totalTime": self.total_time, "turns": turns}
+                         "boardSize": self.n, "totalTime": self.total_time, "turns": turns, "gameStates": self.all_game_states}
 
         with open(self.output_file, "w") as out:
             json.dump(game_metadata, out, indent=3)

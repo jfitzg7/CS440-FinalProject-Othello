@@ -1,6 +1,13 @@
 <template>
-  <b-container class="board">
-    <b-table striped hover :items="items"></b-table>
+  <b-container>
+    <h4 class="text-center"><b>Game Board</b></h4>
+    <p class="text-center">Current move: {{stateCount + 1}}</p>
+    <br/>
+    <b-table :items="gameStates[stateCount]"></b-table>
+    <b-row align-h="center">
+      <button v-if="stateCount < totalMoves-1" v-on:click="stateCount++">Next move</button>
+      <button v-if="stateCount > 0" v-on:click="stateCount--">Previous move</button>
+    </b-row>
   </b-container>
 </template>
 
@@ -11,7 +18,9 @@
     name : 'Board',
     data() {
       return {
-        items: json.turns
+        gameStates: json.gameStates,
+        stateCount: 0,
+        totalMoves: json.statistics.numTurns
       }
     }
   }
