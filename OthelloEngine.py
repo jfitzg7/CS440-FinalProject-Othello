@@ -99,7 +99,6 @@ class GameEngine:
             turnTime = time.time() - start
 
             if turnTime > self.time_limit:
-                print("Team {} exceeded their time limit: {}".format(team.team_type, turnTime))
                 raise Exception("Team {} exceeded their time limit: {}".format(team.team_type, turnTime))
             elif not self.check_valid(move):
                 raise Exception("Team {} made an invalid move: {}".format(team.team_type, move))
