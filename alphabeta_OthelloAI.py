@@ -17,7 +17,7 @@ class Othello_AI:
         # Possible values are: 'W', 'B', or '-'
         # Return your desired move (If invalid, instant loss)
         # Example move: ('W', (1, 6))
-        best_move = alpha_beta_cutoff_search(copy.deepcopy(board_state), self, d=4)
+        best_move = alpha_beta_cutoff_search(copy.deepcopy(board_state), self, d=4, eval_fn=self.totalPieceUtility)
         return best_move
 
 
@@ -176,7 +176,7 @@ class Othello_AI:
         return self.team_type
 
 
-    def utility(self, board_state, player):
+    def totalPieceUtility(self, board_state, player):
         #__________total team piece count utility__________
         totalPieceCount = 0
         if player == 'W':

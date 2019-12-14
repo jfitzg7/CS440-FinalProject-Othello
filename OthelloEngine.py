@@ -380,6 +380,6 @@ def is_valid_move(x, y, dx, dy, board_state, player, surrounds):
 
 if __name__ == "__main__":
     if len(sys.argv) >= 3:
-        GameEngine(white_team_file=sys.argv[1], black_team_file=sys.argv[2], output_file=sys.argv[3], time_limit=1000.0)
+        GameEngine(white_team_file=sys.argv[1], black_team_file=sys.argv[2], output_file=sys.argv[3], time_limit=2.0)
     else:
         print("Usage: " + sys.argv[0] + " white_bot.py black_bot.py replay_file.txt")
