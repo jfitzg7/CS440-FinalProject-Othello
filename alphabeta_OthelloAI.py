@@ -1,7 +1,6 @@
 from OthelloEngine import get_all_moves
 import random
 import copy
-import time
 from math import inf
 
 
