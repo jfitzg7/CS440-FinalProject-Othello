@@ -1,6 +1,7 @@
 from OthelloEngine import get_all_moves
 import random
 import copy
+import time
 from math import inf
 
 
@@ -16,15 +17,12 @@ class Othello_AI:
         # Possible values are: 'W', 'B', or '-'
         # Return your desired move (If invalid, instant loss)
         # Example move: ('W', (1, 6))
-        print("Team: " + self.team_type)
         best_move = alpha_beta_cutoff_search(copy.deepcopy(board_state), self, d=4)
-        print("All moves: " + str(self.actions(board_state)))
-        print("Best move: " + str(best_move))
         return best_move
 
 
-    def actions(self, board_state):
-        moves = get_all_moves(board_state, self.team_type)
+    def actions(self, board_state, player):
+        moves = get_all_moves(board_state, player)
         if len(moves) == 0:
             return [(self.team_type, None)]
         else:
@@ -173,10 +171,13 @@ class Othello_AI:
         else:
             return True
 
+
     def to_move(self):
         return self.team_type
 
+
     def utility(self, board_state, player):
+        #__________total team piece count utility__________
         totalPieceCount = 0
         if player == 'W':
             white_count = sum(row.count('W') for row in board_state)
@@ -186,40 +187,53 @@ class Othello_AI:
             totalPieceCount = black_count
         return totalPieceCount
 
+
     def get_team_name(self):
         # returns a string containing your team name
         return "Alpha-beta bot"
 
+
 #Alpha-beta cutoff from aimapython repository
 def alpha_beta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
-    player = game.to_move()
+    minPlayer = ''
+    maxPlayer = game.to_move()
+    if maxPlayer == 'W':
+        minPlayer = 'B'
+    else:
+        minPlayer = 'W'
 
     # Functions used by alpha_beta
     def max_value(state, alpha, beta, depth):
+        maxPlayer = game.to_move()
         if cutoff_test(state, depth):
             #print("Depth reached: " + str(depth))
             #print(" State: " + str(state))
-            #print(" Utility: " + str(eval_fn(state)))
+            #print(" Utility: " + str(eval_fn(state, maxPlayer)))
             #print(" Terminal state?: " + str(game.terminal_test(state)))
-            return eval_fn(state)
+            return eval_fn(state, maxPlayer)
         v = -inf
-        for a in game.actions(state):
-            v = max(v, min_value(game.result(state, a), alpha, beta, depth + 1))
+        for a in game.actions(state, maxPlayer):
+            v = max(v, min_value(game.result(copy.deepcopy(state), a), alpha, beta, depth + 1))
             if v >= beta:
                 return v
             alpha = max(alpha, v)
         return v
 
     def min_value(state, alpha, beta, depth):
+        minPlayer = ''
+        if game.to_move() == 'W':
+            minPlayer = 'B'
+        else:
+            minPlayer = 'W'
         if cutoff_test(state, depth):
             #print("Depth reached: " + str(depth))
             #print(" State: " + str(state))
-            #print(" Utility: " + str(eval_fn(state)))
+            #print(" Utility: " + str(eval_fn(state, maxPlayer)))
             #print(" Terminal state? " + str(game.terminal_test(state)))
-            return eval_fn(state)
+            return eval_fn(state, maxPlayer)
         v = inf
-        for a in game.actions(state):
-            v = min(v, max_value(game.result(state, a), alpha, beta, depth + 1))
+        for a in game.actions(state, minPlayer):
+            v = min(v, max_value(game.result(copy.deepcopy(state), a), alpha, beta, depth + 1))
             if v <= alpha:
                 return v
             beta = min(beta, v)
@@ -228,19 +242,19 @@ def alpha_beta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
     # Body of alpha_beta_cutoff_search starts here:
     # The default test cuts off at depth d or at a terminal state
     cutoff_test = (cutoff_test or (lambda state, depth: depth > d or game.terminal_test(state)))
-    eval_fn = eval_fn or (lambda state: game.utility(state, player))
+    eval_fn = eval_fn or (lambda state, player: game.utility(state, player))
     best_score = -inf
     beta = inf
     best_action = None
-    for a in game.actions(state):
-        v = min_value(game.result(state, a), best_score, beta, 1)
+    for a in game.actions(state, maxPlayer):
+        v = min_value(game.result(copy.deepcopy(state), a), best_score, beta, 1)
         if v > best_score:
             best_score = v
             best_action = a
     return best_action
 
 
-#___________TESTING___________
+#___________UNIT TESTING___________
 if __name__ == "__main__":
     testBot = Othello_AI('B')
     board_state = [['-' for i in range(8)] for j in range(8)]
