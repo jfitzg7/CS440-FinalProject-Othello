@@ -9,7 +9,7 @@
       </b-list-group>
     </b-row>
     <br/>
-    <b-table id="board" fixed thead-class="d-none" tbody-class="text-center" :fields="fields" :items="gameStates[stateCount]"></b-table>
+    <b-table id="board" fixed thead-class="d-none" tbody-class="text-center" :items="gameStates[stateCount]"></b-table>
     <b-row>
       <b-col offset="2">
         <button v-if="stateCount < totalMoves-1" v-on:click="stateCount++">Next move</button>
