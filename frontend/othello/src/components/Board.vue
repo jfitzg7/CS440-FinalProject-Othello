@@ -9,7 +9,7 @@
       </b-list-group>
     </b-row>
     <br/>
-    <b-table thead-class="d-none" tbody-class="text-center" bordered :items="gameStates[stateCount]"></b-table>
+    <b-table id="board" fixed thead-class="d-none" tbody-class="text-center" :items="gameStates[stateCount]"></b-table>
     <b-row>
       <b-col offset="2">
         <button v-if="stateCount < totalMoves-1" v-on:click="stateCount++">Next move</button>
@@ -63,5 +63,11 @@
 </script>
 
 <style>
+  #board tbody tr:nth-child(odd) td:nth-child(odd) {
+    background-color: #cea;
+  }
 
+  #board tbody tr:nth-child(even) td:nth-child(even) {
+    background-color: #cea;
+  }
 </style>
