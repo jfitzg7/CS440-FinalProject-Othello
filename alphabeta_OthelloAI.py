@@ -12,7 +12,7 @@ class Othello_AI:
         # board_size and time_limit will likely stay constant, but if you want this can add different challanges
         self.team_type = team_type
 
-    def get_move(self, board_state):
+    def get_move(self, board_state, turn_number):
         # board state will be an board_size by board_size array with the current state of the game.
         # Possible values are: 'W', 'B', or '-'
         # Return your desired move (If invalid, instant loss)
