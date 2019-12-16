@@ -2,7 +2,7 @@ from OthelloEngine import get_all_moves
 import random
 import copy
 from math import inf
-from algorithms import alpha_beta_cutoff_search
+from algorithms import minimax_cutoff
 
 
 class Othello_AI:
@@ -12,12 +12,13 @@ class Othello_AI:
         # board_size and time_limit will likely stay constant, but if you want this can add different challanges
         self.team_type = team_type
 
+
     def get_move(self, board_state):
         # board state will be an board_size by board_size array with the current state of the game.
         # Possible values are: 'W', 'B', or '-'
         # Return your desired move (If invalid, instant loss)
         # Example move: ('W', (1, 6))
-        best_move = alpha_beta_cutoff_search(copy.deepcopy(board_state), self, d=4, eval_fn=self.subtractOpponentsPiecesUtility)
+        best_move = minimax_cutoff(copy.deepcopy(board_state), self, d=4, eval_fn=self.subtractOpponentsPiecesUtility)
         return best_move
 
 
@@ -187,6 +188,7 @@ class Othello_AI:
             totalPieceCount = black_count
         return totalPieceCount
 
+
     def subtractOpponentsPiecesUtility(self, board_state, player):
         # The idea behind this utility is that your total pieces compared to the opponents total pieces
         # determines who wins and by how much at the end of a game. Subtracting your opponents pieces from yours
@@ -206,7 +208,7 @@ class Othello_AI:
 
     def get_team_name(self):
         # returns a string containing your team name
-        return "Alpha-beta bot"
+        return "Minimax Bot"
 
 
 #___________UNIT TESTING___________
