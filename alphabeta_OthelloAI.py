@@ -16,7 +16,7 @@ class Othello_AI:
         # Possible values are: 'W', 'B', or '-'
         # Return your desired move (If invalid, instant loss)
         # Example move: ('W', (1, 6))
-        best_move = alpha_beta_cutoff_search(copy.deepcopy(board_state), self, d=4, eval_fn=self.totalPieceUtility)
+        best_move = alpha_beta_cutoff_search(copy.deepcopy(board_state), self, d=2, eval_fn=self.totalPieceUtility)
         return best_move
 
 
@@ -186,6 +186,22 @@ class Othello_AI:
             totalPieceCount = black_count
         return totalPieceCount
 
+    def subtractOpponentsPiecesUtility(self, board_state, player):
+        # The idea behind this utility is that your total pieces compared to the opponents total pieces
+        # determines who wins and by how much at the end of a game. Subtracting your opponents pieces from yours
+        # will determine how much your opponent owes you (if you win), or how much you owe your opponent (if they win).
+
+        white_count = sum(row.count('W') for row in board_state)
+        black_count = sum(row.count('B') for row in board_state)
+
+        if player == 'W':
+            teamCount = white_count
+            opponentCount = black_count
+        else:
+            teamCount = black_count
+            opponentCount = white_count
+        return teamCount - opponentCount
+
 
     def get_team_name(self):
         # returns a string containing your team name
@@ -203,7 +219,6 @@ def alpha_beta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
 
     # Functions used by alpha_beta
     def max_value(state, alpha, beta, depth):
-        maxPlayer = game.to_move()
         if cutoff_test(state, depth):
             #print("Depth reached: " + str(depth))
             #print(" State: " + str(state))
@@ -219,17 +234,12 @@ def alpha_beta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
         return v
 
     def min_value(state, alpha, beta, depth):
-        minPlayer = ''
-        if game.to_move() == 'W':
-            minPlayer = 'B'
-        else:
-            minPlayer = 'W'
         if cutoff_test(state, depth):
             #print("Depth reached: " + str(depth))
             #print(" State: " + str(state))
             #print(" Utility: " + str(eval_fn(state, maxPlayer)))
             #print(" Terminal state? " + str(game.terminal_test(state)))
-            return eval_fn(state, maxPlayer)
+            return eval_fn(state, minPlayer)
         v = inf
         for a in game.actions(state, minPlayer):
             v = min(v, max_value(game.result(copy.deepcopy(state), a), alpha, beta, depth + 1))
