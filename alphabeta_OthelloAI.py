@@ -16,7 +16,7 @@ class Othello_AI:
         # Possible values are: 'W', 'B', or '-'
         # Return your desired move (If invalid, instant loss)
         # Example move: ('W', (1, 6))
-        best_move = alpha_beta_cutoff_search(copy.deepcopy(board_state), self, d=2, eval_fn=self.totalPieceUtility)
+        best_move = alpha_beta_cutoff_search(copy.deepcopy(board_state), self, d=4, eval_fn=self.subtractOpponentsPiecesUtility)
         return best_move
 
 
@@ -206,61 +206,6 @@ class Othello_AI:
     def get_team_name(self):
         # returns a string containing your team name
         return "Alpha-beta bot"
-
-
-#Alpha-beta cutoff from aimapython repository
-def alpha_beta_cutoff_search(state, game, d=4, cutoff_test=None, eval_fn=None):
-    minPlayer = ''
-    maxPlayer = game.to_move()
-    if maxPlayer == 'W':
-        minPlayer = 'B'
-    else:
-        minPlayer = 'W'
-
-    # Functions used by alpha_beta
-    def max_value(state, alpha, beta, depth):
-        if cutoff_test(state, depth):
-            #print("Depth reached: " + str(depth))
-            #print(" State: " + str(state))
-            #print(" Utility: " + str(eval_fn(state, maxPlayer)))
-            #print(" Terminal state?: " + str(game.terminal_test(state)))
-            return eval_fn(state, maxPlayer)
-        v = -inf
-        for a in game.actions(state, maxPlayer):
-            v = max(v, min_value(game.result(copy.deepcopy(state), a), alpha, beta, depth + 1))
-            if v >= beta:
-                return v
-            alpha = max(alpha, v)
-        return v
-
-    def min_value(state, alpha, beta, depth):
-        if cutoff_test(state, depth):
-            #print("Depth reached: " + str(depth))
-            #print(" State: " + str(state))
-            #print(" Utility: " + str(eval_fn(state, maxPlayer)))
-            #print(" Terminal state? " + str(game.terminal_test(state)))
-            return eval_fn(state, minPlayer)
-        v = inf
-        for a in game.actions(state, minPlayer):
-            v = min(v, max_value(game.result(copy.deepcopy(state), a), alpha, beta, depth + 1))
-            if v <= alpha:
-                return v
-            beta = min(beta, v)
-        return v
-
-    # Body of alpha_beta_cutoff_search starts here:
-    # The default test cuts off at depth d or at a terminal state
-    cutoff_test = (cutoff_test or (lambda state, depth: depth > d or game.terminal_test(state)))
-    eval_fn = eval_fn or (lambda state, player: game.utility(state, player))
-    best_score = -inf
-    beta = inf
-    best_action = None
-    for a in game.actions(state, maxPlayer):
-        v = min_value(game.result(copy.deepcopy(state), a), best_score, beta, 1)
-        if v > best_score:
-            best_score = v
-            best_action = a
-    return best_action
 
 
 #___________UNIT TESTING___________
