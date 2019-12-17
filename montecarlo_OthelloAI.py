@@ -19,7 +19,7 @@ class Othello_AI:
         # Return your desired move (If invalid, instant loss)
         # Example move: ('W', (1, 6))
         new_board_state = [turn_number, board_state]
-        best_move = monte_carlo_tree_search(copy.deepcopy(new_board_state), self, N=50)
+        best_move = monte_carlo_tree_search(copy.deepcopy(new_board_state), self, N=100)
         return best_move
 
 
@@ -212,4 +212,4 @@ if __name__ == "__main__":
     board_state[8 // 2][8 // 2] = "W"
     board_state[8 // 2 - 1][8 // 2] = "B"
     board_state[8 // 2][8 // 2 - 1] = "B"
-    print(testBot.get_move(board_state))
+    print(testBot.get_move(board_state, 0))
